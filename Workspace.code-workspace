@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "/Users/jadenvanrijswijk/Desktop/vehicles"
+		},
+		{
+			"path": "/Users/jadenvanrijswijk/Desktop/nonvehicles"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
