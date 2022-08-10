@@ -53,21 +53,24 @@ class NN:
     def Train(self,):
         opt = Adam(learning_rate=0.001)
 
-        self.model.compile(optimizer=opt, loss='mse', metrics=['accuracy'])
+        self.model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
         hist = self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=30, verbose=1,
-         steps_per_epoch=300, validation_steps=10, batch_size=1)
+         steps_per_epoch=100, validation_steps=10, batch_size=1) 
 
-        self.model.save('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m7')
+        self.model.save('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m9')
                 
     def testModelAccuracy(self,):
         correct = 0
         incorrect = 0
 
-        self.model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m6')
+        self.model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m9')
 
         for im, answer in zip(x_test, y_test):
+            im = im.reshape(1,64,64,1)
+
             pred = self.model.predict(im)
             avg_pred = (sum(pred) / len(pred))[0]
+            avg_pred = (sum(avg_pred) / len(avg_pred))[0]
 
             if avg_pred > 0.9 and answer == 1:
                 correct += 1
@@ -86,5 +89,5 @@ if __name__ == '__main__':
     n = NN()
     n.Model()
     n.Train()
-    n.testModelAccuracy()
+    # n.testModelAccuracy()
     

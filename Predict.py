@@ -3,6 +3,7 @@ import NeuralNet as n
 
 import imutils, time
 from cv2 import cv2 
+import numpy as np
 from keras.models import load_model
 
 class SlidingWindow:
@@ -10,14 +11,14 @@ class SlidingWindow:
         self.img = cv2.imread(img_path)
         self.img_path = img_path
         (self.win_w, self.win_h) = (64, 64)
-        self.step_size = 50
+        self.step_size = 12
         self.scale = 1.5
         self.min_size = (200,200)
 
     def resizeImage(self,):
         # compute the new dimensions of the image and resize it
         # if self.img.size > 2700000:
-        w = int(self.img.shape[1] / 5)
+        w = int(self.img.shape[1] / 2)
         self.img = imutils.resize(self.img, width=w)
         #     self.img = imutils.resize(self.img, width=w)
         #     self.step_size = int(self.img.size / 100000)
@@ -47,10 +48,13 @@ class SlidingWindow:
             for (x, y, window) in self.moveWindow():
                 if window.shape[0] != self.win_h or window.shape[1] != self.win_h:
                     continue
+
+                window = d.shapeWindow(window)
                 
-                hog = d.hogFeatures(window)
+                hog = d.hogFeatures(window).reshape(1,64,64,1)
                 pred = model.predict(hog)
                 avg_pred = (sum(pred) / len(pred))[0]
+                avg_pred = (sum(avg_pred) / len(avg_pred))[0]
 
                 print(avg_pred)
 
@@ -65,14 +69,29 @@ class SlidingWindow:
 
 if __name__ == '__main__':
     d = d.Data()
-    model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m6')
+    x_train, x_test, y_train, y_test = d.shapeData()    
 
-    # s = SlidingWindow('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/data/validation/highway.png')
+    model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m8')
+
+    # im = cv2.imread('/Users/jadenvanrijswijk/Desktop/vehicles/GTI_MiddleClose/image0453.png')
+    # im = d.shapeWindow(im)
+
+    # hog = d.hogFeatures(im).reshape(1,64,64,1)
+    # pred = model.predict(hog)
+    # avg_pred = (sum(pred) / len(pred))[0]
+    # avg_pred = (sum(avg_pred) / len(avg_pred))[0]
+    # print(avg_pred)
+
+    # im = x_test[100]
+    # im = im.reshape(1,64,64,1)
+
+    # pred = model.predict(im)
+    # avg_pred = (sum(pred) / len(pred))[0]
+    # avg_pred = (sum(avg_pred) / len(avg_pred))[0]
+
+    # print(avg_pred, y_test[100])
+
+    print(y_test)
+
+    # s = SlidingWindow('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/data/validation/trafficjam.jpeg')
     # s.loopWindow()
-
-    x_train, x_test, y_train, y_test = d.shapeData()
-
-    hog = d.hogFeatures(x_train[0])
-    pred = model.predict(hog)
-    avg_pred = (sum(pred) / len(pred))[0]
-    print(pred, avg_pred)
