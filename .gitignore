@@ -131,4 +131,5 @@ dmypy.json
 # My ignores
 data/
 models/
-.gitattributes
+.*
+!/.gitignore
