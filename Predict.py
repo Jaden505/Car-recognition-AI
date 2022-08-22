@@ -1,10 +1,8 @@
-import CreateData as d
-import NeuralNet as n
-
 import imutils, time
 from cv2 import cv2 
-import numpy as np
 from keras.models import load_model
+
+import CreateData as d
 
 class SlidingWindow:
     def __init__(self, img_path):
@@ -73,25 +71,5 @@ if __name__ == '__main__':
 
     model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m8')
 
-    # im = cv2.imread('/Users/jadenvanrijswijk/Desktop/vehicles/GTI_MiddleClose/image0453.png')
-    # im = d.shapeWindow(im)
-
-    # hog = d.hogFeatures(im).reshape(1,64,64,1)
-    # pred = model.predict(hog)
-    # avg_pred = (sum(pred) / len(pred))[0]
-    # avg_pred = (sum(avg_pred) / len(avg_pred))[0]
-    # print(avg_pred)
-
-    # im = x_test[100]
-    # im = im.reshape(1,64,64,1)
-
-    # pred = model.predict(im)
-    # avg_pred = (sum(pred) / len(pred))[0]
-    # avg_pred = (sum(avg_pred) / len(avg_pred))[0]
-
-    # print(avg_pred, y_test[100])
-
-    print(y_test)
-
-    # s = SlidingWindow('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/data/validation/trafficjam.jpeg')
-    # s.loopWindow()
+    s = SlidingWindow('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/data/validation/trafficjam.jpeg')
+    s.loopWindow()

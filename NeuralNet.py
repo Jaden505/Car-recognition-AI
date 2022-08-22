@@ -1,6 +1,3 @@
-# import Predict as s
-import CreateData as d
-
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,6 +12,8 @@ from tensorflow.keras.optimizers import Adam, SGD
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from keras.models import load_model
 
+import CreateData as d
+
 # Allow Tensorflow to train the model further 
 config = ConfigProto()
 config.gpu_options.allow_growth = True
@@ -27,14 +26,6 @@ class NN:
         model = Sequential()
 
         model.add(Input(shape=(64,64,1)))
-        # model.add(Dense(32, activation='relu'))
-        # model.add(Dense(32, activation='relu'))
-        # model.add(Dense(64, activation='relu'))
-        # model.add(Dense(64, activation='relu'))
-        # model.add(Dense(128, activation='relu'))
-        # model.add(Dense(128, activation='relu'))
-        # model.add(Dense(256, activation='relu'))
-        # model.add(Dense(256, activation='relu'))
         model.add(Conv2D(filters=8,kernel_size=(3,3),padding="same", activation="relu"))
         model.add(Conv2D(filters=10,kernel_size=(3,3),padding="same", activation="relu"))
         model.add(Conv2D(filters=10,kernel_size=(3,3),padding="same", activation="relu"))
