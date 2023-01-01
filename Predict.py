@@ -1,11 +1,9 @@
-import time
+import numpy as np
+import imutils, cv2,time
 
-import imutils
-from cv2 import cv2
 from keras.models import load_model
 
 import CreateData as d
-
 
 class SlidingWindow:
     def __init__(self, img_path):
@@ -16,6 +14,17 @@ class SlidingWindow:
         self.scale = 1.5
         self.min_size = (200,200)
 
+    def shapeWindow(self, im):
+        im = im.tolist()
+
+        for x in range(len(im)):
+            for y in range(len(im[x])):
+                im[x][y] = [int(sum(im[0][0]) / 3)]
+
+        im = np.asarray(im)
+        im = im.reshape(64, 64, 1)
+
+        return im
     def resizeImage(self,):
         # compute the new dimensions of the image and resize it
         # if self.img.size > 2700000:
@@ -50,10 +59,9 @@ class SlidingWindow:
                 if window.shape[0] != self.win_h or window.shape[1] != self.win_h:
                     continue
 
-                window = d.shapeWindow(window)
+                window = self.shapeWindow(window)
                 
-                hog = d.hogFeatures(window).reshape(1,64,64,1)
-                pred = model.predict(hog)
+                pred = model.predict(window.shape(64,64))
                 avg_pred = (sum(pred) / len(pred))[0]
                 avg_pred = (sum(avg_pred) / len(avg_pred))[0]
 
@@ -70,9 +78,9 @@ class SlidingWindow:
 
 if __name__ == '__main__':
     d = d.Data()
-    x_train, x_test, y_train, y_test = d.shapeData()    
+    x_train, x_test, y_train, y_test = d.shapeData()
 
-    model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m8')
+    model = load_model('models/m1')
 
-    s = SlidingWindow('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/data/validation/trafficjam.jpeg')
+    s = SlidingWindow('data/validation/trafficjam.jpeg')
     s.loopWindow()

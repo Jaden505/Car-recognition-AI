@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-from cv2 import cv2
+import cv2
 from keras.layers import *
 from keras import backend as K
 from tensorflow.compat.v1 import ConfigProto
@@ -25,30 +25,37 @@ class NN:
     def Model(self,):
         model = Sequential()
 
+        # Input image array
         model.add(Input(shape=(64,64,1)))
-        model.add(Conv2D(filters=8,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(Conv2D(filters=10,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(Conv2D(filters=10,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(MaxPool2D(pool_size=(10,10),strides=(2,2)))
-        model.add(Conv2D(filters=12,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(Conv2D(filters=12,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(Conv2D(filters=12,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(MaxPool2D(pool_size=(15,15),strides=(2,2)))
-        model.add(Conv2D(filters=16,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(Conv2D(filters=16,kernel_size=(3,3),padding="same", activation="relu"))
-        model.add(Conv2D(filters=16,kernel_size=(3,3),padding="same", activation="relu"))
+
+        # Hidden layers
+        # model.add(Conv2D(filters=8,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(Conv2D(filters=10,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(Conv2D(filters=10,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(MaxPool2D(pool_size=(10,10),strides=(2,2)))
+        # model.add(Conv2D(filters=12,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(Conv2D(filters=12,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(Conv2D(filters=12,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(MaxPool2D(pool_size=(15,15),strides=(2,2)))
+        # model.add(Conv2D(filters=16,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(Conv2D(filters=16,kernel_size=(3,3),padding="same", activation="relu"))
+        # model.add(Conv2D(filters=16,kernel_size=(3,3),padding="same", activation="relu"))
+        model.add(Flatten())
+
+        # Output 0 or 1 (true or false) based on if there is a car
         model.add(Dense(1, activation='sigmoid'))
         
         self.model = model
 
     def Train(self,):
-        opt = Adam(learning_rate=0.001)
+        opt = SGD(learning_rate=0.01, momentum=0.9)
 
         self.model.compile(optimizer=opt, loss='binary_crossentropy', metrics=['accuracy'])
-        hist = self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=30, verbose=1,
-         steps_per_epoch=100, validation_steps=10, batch_size=1) 
 
-        self.model.save('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m1')
+        self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=100, verbose=2,
+         steps_per_epoch=800, validation_steps=10, batch_size=8)
+
+        self.model.save('models/m1')
                 
     def testModelAccuracy(self,):
         correct = 0
@@ -60,8 +67,8 @@ class NN:
             im = im.reshape(1,64,64,1)
 
             pred = self.model.predict(im)
-            avg_pred = (sum(pred) / len(pred))[0]
-            avg_pred = (sum(avg_pred) / len(avg_pred))[0]
+            avg_pred = sum(pred) / len(pred)
+            avg_pred = sum(avg_pred) / len(avg_pred)
 
             if avg_pred > 0.9 and answer == 1:
                 correct += 1
@@ -80,5 +87,5 @@ if __name__ == '__main__':
     n = NN()
     n.Model()
     n.Train()
-    # n.testModelAccuracy()
+    n.testModelAccuracy()
     
