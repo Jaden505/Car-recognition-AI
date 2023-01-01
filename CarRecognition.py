@@ -48,13 +48,13 @@ class NN:
         hist = self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=30, verbose=1,
          steps_per_epoch=100, validation_steps=10, batch_size=1) 
 
-        self.model.save('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m9')
+        self.model.save('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m1')
                 
     def testModelAccuracy(self,):
         correct = 0
         incorrect = 0
 
-        self.model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m9')
+        self.model = load_model('/Users/jadenvanrijswijk/Downloads/CarPredictionAI/models/m1')
 
         for im, answer in zip(x_test, y_test):
             im = im.reshape(1,64,64,1)

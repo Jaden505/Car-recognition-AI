@@ -1,8 +1,11 @@
-import imutils, time
-from cv2 import cv2 
+import time
+
+import imutils
+from cv2 import cv2
 from keras.models import load_model
 
 import CreateData as d
+
 
 class SlidingWindow:
     def __init__(self, img_path):
