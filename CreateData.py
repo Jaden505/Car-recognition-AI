@@ -1,9 +1,6 @@
 import glob, pickle
 import numpy as np
 from sklearn.model_selection import train_test_split
-from skimage.feature import hog
-from skimage.io import imread
-from skimage import exposure
 from PIL import Image
 import os
 
@@ -52,6 +49,17 @@ class Data:
        im = im.resize((64, 64))
        return np.array(im)
 
+    def shapeWindow(self, im):
+        im = im.tolist()
+
+        for x in range(len(im)):
+            for y in range(len(im[x])):
+                im[x][y] = [int(sum(im[0][0]) / 3)]
+
+        im = np.asarray(im)
+        im = im.reshape(64, 64, 1)
+
+        return im
 if __name__ == '__main__':
     d = Data()
     # d.createDataset()
