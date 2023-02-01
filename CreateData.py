@@ -57,4 +57,3 @@ if __name__ == '__main__':
     d = Data()
     # d.createDataset()
     x_train, x_test, y_train, y_test = d.shapeData()
-    print(x_test, y_test)
