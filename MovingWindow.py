@@ -4,16 +4,16 @@ import imutils, time
 import cv2
 from keras.models import load_model
 import numpy as np
-
+from PIL import Image
 
 class SlidingWindow:
     def __init__(self, img_path):
         self.img = cv2.imread(img_path)
         self.img_path = img_path
-        (self.win_w, self.win_h) = (64, 64)
-        self.step_size = 12
-        self.scale = 1.5
-        self.min_size = (200, 200)
+        (self.win_w, self.win_h) = (64, 64)  # Window size
+        self.step_size = 30  # Pixels to move the window
+        self.scale = 1.5  # Scale to resize the image after each iteration
+        self.min_size = (200, 200)  # Minimum size of the image to stop resizing
 
     def resizeImage(self, ):
         # compute the new dimensions of the image and resize it
@@ -45,14 +45,17 @@ class SlidingWindow:
     def shapeWindow(self, im):
         im = im.tolist()
 
+
         for x in range(len(im)):
             for y in range(len(im[x])):
                 im[x][y] = [int(sum(im[0][0]) / 3)]
 
-        im = np.asarray(im)
-        im = im.reshape(64, 64, 1)
+        im = np.array(im).reshape(64, 64)  # Convert to numpy array
+        im = Image.fromarray(im, 'L')  # Convert to PIL image and make grayscale
+        im = np.array(im).reshape(1, 64, 64, 1)  # Convert back to numpy array and add dimensions
 
         return im
+
 
     def loopWindow(self, ):
         # loop over the sliding window for each resized image
@@ -63,12 +66,11 @@ class SlidingWindow:
 
                 window = self.shapeWindow(window)
 
-                img = window.reshape(1, 64, 64, 1)
-                pred = model.predict(img)[0][0]
+                pred = model.predict(window)[0][0]
 
                 print(pred)
 
-                if pred > 0.8:
+                if pred == 1.0:
                     cv2.rectangle(resized, (x, y), (x + self.win_w, y + self.win_h), (255, 0, 0), 2)
 
                 clone = resized.copy()
@@ -80,7 +82,6 @@ class SlidingWindow:
 
 if __name__ == '__main__':
     d = d.Data()
-    x_train, x_test, y_train, y_test = d.shapeData()
 
     model = load_model('models/m1')
 

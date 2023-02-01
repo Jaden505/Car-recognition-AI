@@ -25,5 +25,5 @@ if __name__ == "__main__":
     d = d.Data()
     p = Predict()
 
-    p.singleCarImagePredict('data/validation/car.jpeg')
-    p.singleCarImagePredict('data/validation/nocar.png')
+    p.singleCarImagePredict('data/validation/carFromHighway.png')
+    # p.singleCarImagePredict('data/validation/nocar.png')
