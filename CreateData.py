@@ -45,21 +45,14 @@ class Data:
             pickle.dump(data, f)
 
     def shapeImage(self, im_path):
-       im = Image.open(im_path).convert('L')
-       im = im.resize((64, 64))
-       return np.array(im)
+        im = Image.open(im_path).convert('L')
+        im_data = np.array(im)
 
-    def shapeWindow(self, im):
-        im = im.tolist()
+        im_data = im_data.reshape(64, 64, 1)
 
-        for x in range(len(im)):
-            for y in range(len(im[x])):
-                im[x][y] = [int(sum(im[0][0]) / 3)]
+        return im_data
 
-        im = np.asarray(im)
-        im = im.reshape(64, 64, 1)
 
-        return im
 if __name__ == '__main__':
     d = Data()
     # d.createDataset()

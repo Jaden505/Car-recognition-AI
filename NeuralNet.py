@@ -40,11 +40,11 @@ class NN:
         # Train the model
         self.model.fit(x_train, y_train, epochs=10, batch_size=32, validation_data=(x_test, y_test))
 
+        self.model.save('models/m1')
+
         # Evaluate the model on test data
         test_loss, test_acc = self.model.evaluate(y_test, y_test, verbose=0)
         print('Test accuracy:', test_acc)
-
-        self.model.save('models/m1')
 
 
 if __name__ == '__main__':
