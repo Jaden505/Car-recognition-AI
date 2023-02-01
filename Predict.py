@@ -9,16 +9,21 @@ class Predict:
 
     def singleCarImagePredict(self, img_path):
         shaped_img = d.shapeImage(img_path)
+        shaped_img = shaped_img.reshape(1, 64, 64, 1)
 
-        print(shaped_img)
+        prediction = self.model.predict(shaped_img)
 
-        self.model.predict(shaped_img)
+        print(prediction)
+
+        if (prediction[0][0] > 0.5):
+            print('Car')
+        else:
+            print('Not a car')
 
 
 if __name__ == "__main__":
     d = d.Data()
     p = Predict()
 
-    x_train, x_test, y_train, y_test = d.shapeData()
-
     p.singleCarImagePredict('data/validation/car.jpeg')
+    p.singleCarImagePredict('data/validation/nocar.png')
