@@ -11,17 +11,16 @@ class SlidingWindow:
         self.img = cv2.imread(img_path)
         self.img_path = img_path
         (self.win_w, self.win_h) = (64, 64)  # Window size
-        self.step_size = 30  # Pixels to move the window
+        self.step_size = 32  # Pixels to move the window
         self.scale = 1.5  # Scale to resize the image after each iteration
         self.min_size = (200, 200)  # Minimum size of the image to stop resizing
 
     def resizeImage(self, ):
         # compute the new dimensions of the image and resize it
-        # if self.img.size > 2700000:
-        w = int(self.img.shape[1] / 2)
-        self.img = imutils.resize(self.img, width=w)
-        #     self.img = imutils.resize(self.img, width=w)
-        #     self.step_size = int(self.img.size / 100000)
+        if self.img.size > 2700000:
+            w = int(self.img.shape[1] / 2)
+            self.img = imutils.resize(self.img, width=w)
+            self.step_size = int(self.step_size / 2)
 
         yield self.img
 
@@ -32,7 +31,7 @@ class SlidingWindow:
             if self.img.shape[0] < self.min_size[1] or self.img.shape[1] < self.min_size[0]:
                 break
 
-            # self.step_size = int(self.img.size / 100000)
+            self.step_size = int(self.step_size / 2)
 
             yield self.img
 
